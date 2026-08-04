@@ -40,17 +40,17 @@ if os.path.exists(_env_file):
 # ==============================================================================
 
 USER_EXECUTION_MODE = "DRY_RUN"
-USER_V2_MOMENTUM_THRESHOLD_CENTS = 0.15   # 15-cent (+0.15) absolute odds increase threshold
-USER_V2_MOMENTUM_WINDOW_SEC = 10.0        # Sliding momentum lookback window (10 seconds)
+USER_V2_MOMENTUM_THRESHOLD_CENTS = 0.10    # 15-cent (+0.15) absolute odds increase threshold
+USER_V2_MOMENTUM_WINDOW_SEC = 10.0         # Sliding momentum lookback window (10 seconds)
 USER_V2_ENTRY_SLIPPAGE_BUFFER = 0.04       # 4-cent (+0.04) limit buy ceiling buffer
-USER_V2_TAKE_PROFIT_CENTS = 0.15            # Take Profit absolute cents gain target (+0.05 / +5 cents for Tier 1)
+USER_V2_TAKE_PROFIT_CENTS = 0.20           # Take Profit absolute cents gain target (+0.05 / +5 cents for Tier 1)
 USER_V2_HIGH_ODDS_CUTOFF = 0.84            # High odds cutoff threshold for Tier 2 ($0.75 / 75 cents)
 USER_V2_HIGH_ODDS_TP_TARGET = 0.995        # Fixed TP target price for Tier 2 ($0.995 / $1.00 or below)
 USER_V2_TRAILING_SL_ENABLED = True         # Enable Trailing Stop Loss based on High Water Mark
 USER_V2_TRAILING_SL_DISTANCE_CENTS = 0.10  # Trailing SL distance from HWM (10 cents)
-USER_V2_MIN_ENTRY_ODDS_FLOOR = 0.65       # Minimum odds floor required for trade entry ($0.65 / 65 cents)
+USER_V2_MIN_ENTRY_ODDS_FLOOR = 0.65        # Minimum odds floor required for trade entry ($0.65 / 65 cents)
 USER_V2_MAX_POSITION_SIZE_USD = 2.0        # Max position size per trade ($2.00)
-USER_V2_MAX_ACTIVE_POSITIONS = 1          # Single active position limit across bot (1 position)
+USER_V2_MAX_ACTIVE_POSITIONS = 1           # Single active position limit across bot (1 position)
 # ==============================================================================
 
 
