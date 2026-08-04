@@ -37,16 +37,48 @@ class TelegramCommandRouter:
 
     def start(self) -> None:
         """
-        Starts long-polling worker thread for Telegram slash commands.
+        Starts long-polling worker thread for Telegram slash commands and registers UI command menu.
         """
         if not self.bot_token:
             logger.info("Telegram Command Router disabled (TELEGRAM_BOT_TOKEN not configured).")
             return
 
+        self._register_bot_commands()
         self.running = True
         self.poll_thread = threading.Thread(target=self._poll_loop, daemon=True, name="TelegramCommandRouterPoll")
         self.poll_thread.start()
         logger.info("✓ [TELEGRAM COMMAND ROUTER] Long-polling worker started successfully.")
+
+    def _register_bot_commands(self) -> None:
+        """
+        Registers slash commands with Telegram Bot API so they automatically appear in the user's hamburger / '/' command menu.
+        """
+        if not self.bot_token:
+            return
+
+        url = f"https://api.telegram.org/bot{self.bot_token}/setMyCommands"
+        commands = [
+            {"command": "status", "description": "System status & position counts"},
+            {"command": "config", "description": "Strategy parameters & risk settings"},
+            {"command": "pnl", "description": "Win rate % & financial PnL summary"},
+            {"command": "activate", "description": "Activate trading engine signal generation"},
+            {"command": "deactivate", "description": "Deactivate trading engine signal generation"},
+            {"command": "dryrun", "description": "Toggle execution mode (e.g. /dryrun on)"},
+            {"command": "help", "description": "Show interactive command menu"}
+        ]
+
+        try:
+            data = json.dumps({"commands": commands}).encode("utf-8")
+            req = urllib.request.Request(
+                url,
+                data=data,
+                headers={"Content-Type": "application/json", "User-Agent": "PolymarketBot/1.0"}
+            )
+            with urllib.request.urlopen(req, timeout=5.0) as resp:
+                if resp.status == 200:
+                    logger.info("✓ [TELEGRAM COMMAND ROUTER] Registered bot slash commands with Telegram UI menu.")
+        except Exception as e:
+            logger.warning(f"Failed to register Telegram bot command menu: {e}")
 
     def stop(self) -> None:
         """
