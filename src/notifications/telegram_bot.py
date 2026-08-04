@@ -122,6 +122,8 @@ class TelegramCommandRouter:
             self._handle_dryrun(chat_id, args)
         elif cmd == "/status":
             self._handle_status(chat_id)
+        elif cmd == "/config":
+            self._handle_config(chat_id)
         elif cmd == "/pnl":
             self._handle_pnl(chat_id)
         else:
@@ -148,12 +150,32 @@ class TelegramCommandRouter:
         text = (
             "🤖 <b>Polymarket BTC-5m Prediction Bot Controls</b>\n\n"
             "• <code>/status</code> — System status, active mode, & position counts\n"
+            "• <code>/config</code> — Strategy parameters & risk management settings\n"
             "• <code>/pnl</code> — Total trades, win rate %, & financial PnL summary\n"
             "• <code>/activate</code> — Activate trading engine signal generation\n"
             "• <code>/deactivate</code> — Deactivate trading engine signal generation\n"
             "• <code>/dryrun on</code> — Switch execution mode to DRY_RUN (Simulation)\n"
             "• <code>/dryrun off</code> — Switch execution mode to LIVE\n"
             "• <code>/help</code> — Show this command menu"
+        )
+        self._reply(chat_id, text)
+
+    def _handle_config(self, chat_id: str) -> None:
+        trailing_sl_str = "ENABLED" if config.v2_trailing_sl_enabled else "DISABLED"
+        text = (
+            "⚙️ <b>POLYMARKET BOT V2 CONFIGURATION</b>\n\n"
+            f"• <b>USER_V2_MOMENTUM_THRESHOLD_CENTS:</b> <code>+{config.v2_momentum_threshold_cents:.2f}</code> (+{config.v2_momentum_threshold_cents*100:.0f}¢)\n"
+            f"• <b>USER_V2_MOMENTUM_WINDOW_SEC:</b> <code>{config.v2_momentum_window_sec:.1f}s</code>\n"
+            f"• <b>USER_V2_ENTRY_SLIPPAGE_BUFFER:</b> <code>+{config.v2_entry_slippage_buffer:.2f}</code> (+{config.v2_entry_slippage_buffer*100:.0f}¢)\n"
+            f"• <b>USER_V2_TAKE_PROFIT_CENTS:</b> <code>+{config.v2_take_profit_cents:.2f}</code> (+{config.v2_take_profit_cents*100:.0f}¢)\n"
+            f"• <b>USER_V2_HIGH_ODDS_CUTOFF:</b> <code>${config.v2_high_odds_cutoff:.2f}</code> ({config.v2_high_odds_cutoff*100:.0f}¢)\n"
+            f"• <b>USER_V2_HIGH_ODDS_TP_TARGET:</b> <code>${config.v2_high_odds_tp_target:.3f}</code>\n"
+            f"• <b>USER_V2_TRAILING_SL_ENABLED:</b> <code>{trailing_sl_str}</code>\n"
+            f"• <b>USER_V2_TRAILING_SL_DISTANCE_CENTS:</b> <code>-${config.v2_trailing_sl_distance_cents:.2f}</code> (-{config.v2_trailing_sl_distance_cents*100:.0f}¢)\n"
+            f"• <b>USER_V2_MIN_ENTRY_ODDS_FLOOR:</b> <code>${config.v2_min_entry_odds_floor:.2f}</code> ({config.v2_min_entry_odds_floor*100:.0f}¢)\n"
+            f"• <b>USER_V2_MAX_POSITION_SIZE_USD:</b> <code>${config.max_position_size_usd:.2f}</code>\n"
+            f"• <b>USER_V2_MAX_ACTIVE_POSITIONS:</b> <code>{config.v2_max_active_positions}</code>\n"
+            f"• <b>EXECUTION_MODE:</b> <code>{config.execution_mode}</code>"
         )
         self._reply(chat_id, text)
 
