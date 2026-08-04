@@ -33,3 +33,10 @@ models/
 # Environment / Secret overrides
 .env
 .env.local
+
+# OCI Server Commands & Credentials
+*OCI*commands.txt
+Ref_OCI bot commands.txt
+OCI_bot_commands.txt
+OCI*.txt
+
